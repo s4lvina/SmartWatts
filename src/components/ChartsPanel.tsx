@@ -15,6 +15,7 @@ interface ChartsPanelProps {
   mockPowerCurveData: any[];
   mockPowerZoneData: any[];
   mockHRZoneData: any[];
+  ftp?: number;
 }
 
 type TabType = 'pmc' | 'power' | 'zones';
@@ -24,6 +25,7 @@ export function ChartsPanel({
   mockPowerCurveData,
   mockPowerZoneData,
   mockHRZoneData,
+  ftp = 380,
 }: ChartsPanelProps) {
   const [activeTab, setActiveTab] = useState<TabType>('pmc');
 
@@ -65,7 +67,7 @@ export function ChartsPanel({
         {activeTab === 'power' && (
           <div>
             <h3 className="text-sm font-semibold text-gray-300 mb-4">Curva de Potencia</h3>
-            <PowerDurationCurve data={mockPowerCurveData} height={250} ftp={380} />
+            <PowerDurationCurve data={mockPowerCurveData} height={250} ftp={ftp} />
           </div>
         )}
 

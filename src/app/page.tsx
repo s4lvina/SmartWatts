@@ -8,6 +8,7 @@ import { PMCChart } from '@/components/PMCChart';
 import { PowerDurationCurve } from '@/components/PowerDurationCurve';
 import { ZoneDistribution } from '@/components/ZoneDistribution';
 import { StravaActivities } from '@/components/StravaActivities';
+import { useMetrics } from '@/hooks/useMetrics';
 import { useStravaActivities } from '@/hooks/useStrava';
 import { createClient } from '@supabase/supabase-js';
 import { ChartsPanel } from '@/components/ChartsPanel';
@@ -62,6 +63,9 @@ export default function Dashboard() {
   const { activities, loading: activitiesLoading, error: activitiesError } = useStravaActivities(
     user?.strava_access_token || null
   );
+
+  // Hook para calcular métricas reales
+  const metrics = useMetrics(activities);
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -169,31 +173,31 @@ export default function Dashboard() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <MetricCard
               label="Forma Física (CTL)"
-              value={62}
+              value={metrics.ctl}
               unit="puntos"
-              tendencia="up"
-              porcentajeTendencia={5.2}
+              tendencia={metrics.trendCTL >= 0 ? 'up' : 'down'}
+              porcentajeTendencia={Math.abs(metrics.trendCTL)}
               color="success"
             />
             <MetricCard
               label="Fatiga (ATL)"
-              value={28}
+              value={metrics.atl}
               unit="puntos"
-              tendencia="down"
-              porcentajeTendencia={8.1}
+              tendencia={metrics.trendATL >= 0 ? 'up' : 'down'}
+              porcentajeTendencia={Math.abs(metrics.trendATL)}
               color="default"
             />
             <MetricCard
               label="Forma (TSB)"
-              value={34}
+              value={metrics.tsb}
               unit="puntos"
-              tendencia="up"
-              porcentajeTendencia={12.5}
+              tendencia={metrics.trendTSB >= 0 ? 'up' : 'down'}
+              porcentajeTendencia={Math.abs(metrics.trendTSB)}
               color="strava"
             />
             <MetricCard
               label="FTP"
-              value={380}
+              value={metrics.ftp}
               unit="vatios"
               tendencia="neutral"
               color="default"
@@ -222,6 +226,7 @@ export default function Dashboard() {
               mockPowerCurveData={mockPowerCurveData}
               mockPowerZoneData={mockPowerZoneData}
               mockHRZoneData={mockHRZoneData}
+              ftp={metrics.ftp}
             />
           </div>
         </div>
@@ -234,12 +239,16 @@ export default function Dashboard() {
           <div className="space-y-4">
             <div className="bg-dark border border-gray-700 rounded p-4">
               <p className="text-sm text-gray-300">
-                <strong>Recomendación:</strong> Tu forma está excelente hoy (TSB +34). Este es el momento ideal para una sesión de alta intensidad. Considera una sesión como 5×8min en zona Z4-Z5.
+                <strong>Recomendación:</strong> Tu forma actual está en {metrics.tsb > 0 ? 'recuperación positiva' : 'acumulación de fatiga'} (TSB {metrics.tsb >= 0 ? '+' : ''}{metrics.tsb}). 
+                {metrics.tsb > 10 && ' Este es el momento ideal para una sesión de alta intensidad.'}
+                {metrics.tsb > 0 && metrics.tsb <= 10 && ' Puedes hacer una sesión moderada.'}
+                {metrics.tsb <= 0 && ' Es recomendable descansar o hacer entrenamiento de recuperación.'}
               </p>
             </div>
             <div className="bg-dark border border-gray-700 rounded p-4">
               <p className="text-sm text-gray-300">
-                <strong>Consejo de Recuperación:</strong> Basado en la carga de actividad reciente, prioriza 8+ horas de sueño esta noche. Nutrición post-entrenamiento: 60g CHO + 25g proteína dentro de 30 minutos.
+                <strong>Información:</strong> Tu FTP estimado es {metrics.ftp}W basado en tus últimas actividades. 
+                Forma Física: {metrics.ctl} | Fatiga: {metrics.atl} | Balance: {metrics.tsb}
               </p>
             </div>
           </div>
