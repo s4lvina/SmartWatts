@@ -163,13 +163,51 @@ export default function Dashboard() {
           </div>
         ) : null}
 
+        {/* Métricas Actuales - Full Width */}
+        <section className="mb-12">
+          <h2 className="text-xl font-semibold text-gray-100 mb-6">Métricas Actuales</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <MetricCard
+              label="Forma Física (CTL)"
+              value={62}
+              unit="puntos"
+              tendencia="up"
+              porcentajeTendencia={5.2}
+              color="success"
+            />
+            <MetricCard
+              label="Fatiga (ATL)"
+              value={28}
+              unit="puntos"
+              tendencia="down"
+              porcentajeTendencia={8.1}
+              color="default"
+            />
+            <MetricCard
+              label="Forma (TSB)"
+              value={34}
+              unit="puntos"
+              tendencia="up"
+              porcentajeTendencia={12.5}
+              color="strava"
+            />
+            <MetricCard
+              label="FTP"
+              value={380}
+              unit="vatios"
+              tendencia="neutral"
+              color="default"
+            />
+          </div>
+        </section>
+
         {/* Two Column Layout: Activities (60%) + Charts (40%) */}
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 mb-12">
           {/* Left Column: Activities Table (60%) */}
           <div className="lg:col-span-3">
             <h2 className="text-xl font-semibold text-gray-100 mb-6">Actividades Recientes</h2>
             {!activitiesLoading && activities.length > 0 ? (
-              <StravaActivities accessToken={user?.strava_access_token} limit={50} />
+              <StravaActivities accessToken={user?.strava_access_token} itemsPerPage={10} />
             ) : (
               <div className="p-6 bg-gray-800/50 rounded-lg border border-gray-700 text-center text-gray-400">
                 Cargando actividades...
