@@ -36,7 +36,7 @@ export function ZoneDistribution({ data, title, height = 300 }: ZoneDistribution
         <BarChart data={data} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
           <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
           <XAxis dataKey="zone" stroke="#9ca3af" />
-          <YAxis stroke="#9ca3af" label={{ value: 'Minutes', angle: -90, position: 'insideLeft' }} />
+          <YAxis stroke="#9ca3af" label={{ value: 'Minutos', angle: -90, position: 'insideLeft' }} />
           <Tooltip
             contentStyle={{ backgroundColor: '#1a1a1a', border: '1px solid #374151' }}
             labelStyle={{ color: '#e5e7eb' }}

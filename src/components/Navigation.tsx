@@ -10,11 +10,11 @@ interface NavItem {
 }
 
 const navItems: NavItem[] = [
-  { label: 'Dashboard', href: '/', icon: '📊' },
-  { label: 'Activities', href: '/activities', icon: '🚴' },
-  { label: 'Analytics', href: '/analytics', icon: '📈' },
-  { label: 'Coach', href: '/coach', icon: '🤖' },
-  { label: 'Settings', href: '/settings', icon: '⚙️' },
+  { label: 'Panel Principal', href: '/', icon: '📊' },
+  { label: 'Actividades', href: '/activities', icon: '🚴' },
+  { label: 'Análisis', href: '/analytics', icon: '📈' },
+  { label: 'Entrenador', href: '/coach', icon: '🤖' },
+  { label: 'Configuración', href: '/settings', icon: '⚙️' },
 ];
 
 export function Navigation() {
@@ -46,8 +46,7 @@ export function Navigation() {
           {/* User Menu */}
           <div className="flex items-center gap-4">
             <button className="px-4 py-2 rounded bg-strava text-white text-sm font-medium hover:bg-strava/90 transition-colors">
-              Sign In
-            </button>
+            Iniciar Sesión
 
             {/* Mobile Menu Button */}
             <button

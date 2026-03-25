@@ -12,19 +12,19 @@ export function PMCChart({ data, height = 400 }: PMCChartProps) {
   return (
     <div className="card">
       <div className="card-header">
-        <h2 className="card-title">Performance Management Chart (PMC)</h2>
+        <h2 className="card-title">Gráfico de Gestión del Rendimiento (PMC)</h2>
         <div className="flex gap-4 text-sm">
           <div className="flex items-center gap-2">
             <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
-            <span className="text-gray-400">Fitness (CTL)</span>
+            <span className="text-gray-400">Forma Física (CTL)</span>
           </div>
           <div className="flex items-center gap-2">
             <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-            <span className="text-gray-400">Fatigue (ATL)</span>
+            <span className="text-gray-400">Fatiga (ATL)</span>
           </div>
           <div className="flex items-center gap-2">
             <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-            <span className="text-gray-400">Form (TSB)</span>
+            <span className="text-gray-400">Forma (TSB)</span>
           </div>
         </div>
       </div>
@@ -54,7 +54,7 @@ export function PMCChart({ data, height = 400 }: PMCChartProps) {
             stroke="#3b82f6"
             fillOpacity={1}
             fill="url(#colorCtl)"
-            name="Fitness (CTL)"
+            name="Forma Física (CTL)"
           />
           <Area
             type="monotone"
@@ -62,7 +62,7 @@ export function PMCChart({ data, height = 400 }: PMCChartProps) {
             stroke="#ef4444"
             fillOpacity={1}
             fill="url(#colorAtl)"
-            name="Fatigue (ATL)"
+            name="Fatiga (ATL)"
           />
           <Line
             type="monotone"
@@ -70,7 +70,7 @@ export function PMCChart({ data, height = 400 }: PMCChartProps) {
             stroke="#10b981"
             strokeWidth={2}
             dot={false}
-            name="Form (TSB)"
+            name="Forma (TSB)"
           />
         </AreaChart>
       </ResponsiveContainer>

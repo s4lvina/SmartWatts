@@ -56,7 +56,7 @@ export default function Dashboard() {
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-3xl font-bold text-gray-100">SmartWatts</h1>
-              <p className="text-gray-400 mt-1">Performance Cycling Analytics</p>
+              <p className="text-gray-400 mt-1">Análisis de Rendimiento Ciclista</p>
             </div>
             <div className="flex items-center gap-4">
               <select
@@ -64,10 +64,10 @@ export default function Dashboard() {
                 onChange={(e) => setSelectedPeriod(e.target.value)}
                 className="bg-dark-card border border-gray-700 text-gray-100 rounded px-3 py-2 text-sm focus:outline-none focus:border-strava"
               >
-                <option value="week">This Week</option>
-                <option value="month">This Month</option>
-                <option value="quarter">This Quarter</option>
-                <option value="year">This Year</option>
+                <option value="week">Esta Semana</option>
+                <option value="month">Este Mes</option>
+                <option value="quarter">Este Trimestre</option>
+                <option value="year">Este Año</option>
               </select>
             </div>
           </div>
@@ -78,37 +78,37 @@ export default function Dashboard() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* KPI Section */}
         <section className="mb-12">
-          <h2 className="text-xl font-semibold text-gray-100 mb-6">Current Metrics</h2>
+          <h2 className="text-xl font-semibold text-gray-100 mb-6">Métricas Actuales</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <MetricCard
-              label="Fitness (CTL)"
+              label="Forma Física (CTL)"
               value={62}
-              unit="points"
-              trend="up"
-              trendPercent={5.2}
+              unit="puntos"
+              tendencia="up"
+              porcentajeTendencia={5.2}
               color="success"
             />
             <MetricCard
-              label="Fatigue (ATL)"
+              label="Fatiga (ATL)"
               value={28}
-              unit="points"
-              trend="down"
-              trendPercent={8.1}
+              unit="puntos"
+              tendencia="down"
+              porcentajeTendencia={8.1}
               color="default"
             />
             <MetricCard
-              label="Form (TSB)"
+              label="Forma (TSB)"
               value={34}
-              unit="points"
-              trend="up"
-              trendPercent={12.5}
+              unit="puntos"
+              tendencia="up"
+              porcentajeTendencia={12.5}
               color="strava"
             />
             <MetricCard
               label="FTP"
               value={380}
-              unit="watts"
-              trend="neutral"
+              unit="vatios"
+              tendencia="neutral"
               color="default"
             />
           </div>
@@ -125,7 +125,7 @@ export default function Dashboard() {
           <div>
             <ZoneDistribution
               data={mockPowerZoneData}
-              title="Power Zones Distribution"
+              title="Distribución de Zonas de Potencia"
               height={300}
             />
           </div>
@@ -135,7 +135,7 @@ export default function Dashboard() {
         <section className="mb-12">
           <ZoneDistribution
             data={mockHRZoneData}
-            title="Heart Rate Zones Distribution"
+            title="Distribución de Zonas de Frecuencia Cardíaca"
             height={300}
           />
         </section>
@@ -143,17 +143,17 @@ export default function Dashboard() {
         {/* Coach Section (Placeholder) */}
         <section className="card">
           <div className="card-header">
-            <h2 className="card-title">📊 AI Coach Analysis</h2>
+            <h2 className="card-title">📊 Análisis del Entrenador IA</h2>
           </div>
           <div className="space-y-4">
             <div className="bg-dark border border-gray-700 rounded p-4">
               <p className="text-sm text-gray-300">
-                <strong>Recommendation:</strong> Your form is excellent today (TSB +34). This is an ideal time for a high-intensity interval session. Consider a session like 5×8min at Z4-Z5 zone.
+                <strong>Recomendación:</strong> Tu forma está excelente hoy (TSB +34). Este es el momento ideal para una sesión de alta intensidad. Considera una sesión como 5×8min en zona Z4-Z5.
               </p>
             </div>
             <div className="bg-dark border border-gray-700 rounded p-4">
               <p className="text-sm text-gray-300">
-                <strong>Recovery Tip:</strong> Based on recent activity load, prioritize 8+ hours of sleep tonight. Post-ride nutrition: 60g CHO + 25g protein within 30 minutes.
+                <strong>Consejo de Recuperación:</strong> Basado en la carga de actividad reciente, prioriza 8+ horas de sueño esta noche. Nutrición post-entrenamiento: 60g CHO + 25g proteína dentro de 30 minutos.
               </p>
             </div>
           </div>

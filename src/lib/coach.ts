@@ -32,26 +32,26 @@ export async function getCoachAnalysis(
     };
   }
 ): Promise<CoachAnalysis> {
-  const prompt = `You are an expert cycling coach analyzing athlete performance data.
+  const prompt = `Eres un entrenador ciclista experto analizando datos de rendimiento de un atleta.
 
-Athlete Profile:
+Perfil del Atleta:
 - FTP: ${athleteProfile.ftp}W
-- Weight: ${athleteProfile.weight}kg
-- Recent Activities: ${athleteProfile.recentActivities.length} rides
-- CTL (Fitness): ${athleteProfile.currentMetrics.ctl}
-- ATL (Fatigue): ${athleteProfile.currentMetrics.atl}
-- TSB (Form): ${athleteProfile.currentMetrics.tsb}
-- Sleep: ${athleteProfile.dailyData.sleep}h
-- HRV: ${athleteProfile.dailyData.hrv}ms
-- Stress: ${athleteProfile.dailyData.stress}/10
+- Peso: ${athleteProfile.weight}kg
+- Actividades Recientes: ${athleteProfile.recentActivities.length} paseos
+- CTL (Forma Física): ${athleteProfile.currentMetrics.ctl}
+- ATL (Fatiga): ${athleteProfile.currentMetrics.atl}
+- TSB (Forma): ${athleteProfile.currentMetrics.tsb}
+- Sueño: ${athleteProfile.dailyData.sleep}h
+- VFC: ${athleteProfile.dailyData.hrv}ms
+- Estrés: ${athleteProfile.dailyData.stress}/10
 
-Based on this data, provide:
-1. Training recommendation for next session (type, intensity, duration)
-2. Nutrition strategy (CHO/hour, protein, hydration)
-3. Recovery priorities
-4. Injury/overtraining risk assessment
+Basado en estos datos, proporciona:
+1. Recomendación de entrenamiento para próxima sesión (tipo, intensidad, duración)
+2. Estrategia nutricional (CHO/hora, proteína, hidratación)
+3. Prioridades de recuperación
+4. Evaluación de riesgo de lesión/sobreentrenamiento
 
-Format as JSON with keys: training_recommendation, nutrition, recovery, risk_assessment`;
+Formatea como JSON con claves: training_recommendation, nutrition, recovery, risk_assessment`;
 
   try {
     const apiKey = process.env.GOOGLE_GENERATIVE_AI_API_KEY;
@@ -85,20 +85,20 @@ Format as JSON with keys: training_recommendation, nutrition, recovery, risk_ass
 
     // Default response if parsing fails
     return {
-      training_recommendation: 'Rest day or recovery ride - check your current form (TSB) before intense sessions',
-      nutrition: 'Maintain balanced nutrition with adequate carbohydrates',
-      recovery: 'Ensure 8+ hours sleep, manage stress levels',
-      risk_assessment: 'Monitor fatigue levels to prevent overtraining',
+      training_recommendation: 'Día de descanso o paseo de recuperación - verifica tu forma actual (TSB) antes de sesiones intensas',
+      nutrition: 'Mantén nutrición balanceada con carbohidratos adecuados',
+      recovery: 'Asegura 8+ horas de sueño, maneja los niveles de estrés',
+      risk_assessment: 'Monitorea los niveles de fatiga para prevenir sobreentrenamiento',
     };
   } catch (error) {
     console.error('Coach analysis error:', error);
     
     // Return default safe coaching recommendations
     return {
-      training_recommendation: 'Consult your coach or rest today',
-      nutrition: 'Hydrate well and maintain consistent nutrition',
-      recovery: 'Prioritize sleep and stress management',
-      risk_assessment: 'Monitor your training load carefully',
+      training_recommendation: 'Consulta a tu entrenador o descansa hoy',
+      nutrition: 'Hidrátate bien y mantén nutrición consistente',
+      recovery: 'Prioriza el sueño y manejo del estrés',
+      risk_assessment: 'Monitorea tu carga de entrenamiento cuidadosamente',
     };
   }
 }
@@ -114,18 +114,18 @@ export async function analyzeTrainingDocument(
   try {
     const apiKey = process.env.GOOGLE_GENERATIVE_AI_API_KEY;
     if (!apiKey) {
-      return `Analysis for ${topic}: Document received. Please configure Gemini API key for detailed analysis.`;
+      return `Análisis de ${topic}: Documento recibido. Por favor, configura la clave de API de Gemini para análisis detallado.`;
     }
 
-    const prompt = `Analyze this training document and extract key insights:
+    const prompt = `Analiza este documento de entrenamiento y extrae perspectivas clave:
 
-Topic: ${topic}
-Content: ${documentContent.substring(0, 2000)}...
+Tema: ${topic}
+Contenido: ${documentContent.substring(0, 2000)}...
 
-Provide:
-- Key takeaways
-- Applicable protocols
-- Performance optimization tips`;
+Proporciona:
+- Conclusiones clave
+- Protocolos aplicables
+- Consejos de optimización de rendimiento`;
 
     const response = await axios.post(
       `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent?key=${apiKey}`,
@@ -143,10 +143,10 @@ Provide:
     );
 
     const text = response.data.candidates?.[0]?.content?.parts?.[0]?.text || '';
-    return text || `Document analysis for ${topic} completed.`;
+    return text || `Análisis del documento para ${topic} completado.`;
   } catch (error) {
     console.error('Document analysis error:', error);
-    return `Analysis for "${topic}" - Training document received. Share insights with your coach.`;
+    return `Análisis de "${topic}" - Documento de entrenamiento recibido. Comparte perspectivas con tu entrenador.`;
   }
 }
 
@@ -161,18 +161,18 @@ export async function generateTrainingPlan(
   try {
     const apiKey = process.env.GOOGLE_GENERATIVE_AI_API_KEY;
     if (!apiKey) {
-      return `${duration}-week training plan for goals: ${goals.join(', ')}. Please configure Gemini API for personalized plan generation.`;
+      return `Plan de entrenamiento de ${duration} semanas para objetivos: ${goals.join(', ')}. Por favor, configura la API de Gemini para generación de plan personalizado.`;
     }
 
-    const prompt = `Create a ${duration}-week periodized training plan for a cyclist with:
-- Goals: ${goals.join(', ')}
-- Current Fitness (CTL): ${currentFitness}
+    const prompt = `Crea un plan de entrenamiento periodizado de ${duration} semanas para un ciclista con:
+- Objetivos: ${goals.join(', ')}
+- Forma Física Actual (CTL): ${currentFitness}
 
-Provide:
-- Weekly structure (endurance, tempo, threshold, V02max sessions)
-- Recovery days
-- Build, peak, and recovery phases
-- Progression logic`;
+Proporciona:
+- Estructura semanal (sesiones de resistencia, tempo, umbral, V02max)
+- Días de recuperación
+- Fases de construcción, pico y recuperación
+- Lógica de progresión`;
 
     const response = await axios.post(
       `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent?key=${apiKey}`,
@@ -190,9 +190,9 @@ Provide:
     );
 
     const text = response.data.candidates?.[0]?.content?.parts?.[0]?.text || '';
-    return text || `${duration}-week periodized training plan created for your goals.`;
+    return text || `Plan de entrenamiento periodizado de ${duration} semanas creado para tus objetivos.`;
   } catch (error) {
     console.error('Training plan generation error:', error);
-    return `Generated ${duration}-week training plan. Goals: ${goals.join(', ')}`;
+    return `Plan de entrenamiento generado de ${duration} semanas. Objetivos: ${goals.join(', ')}`;
   }
 }

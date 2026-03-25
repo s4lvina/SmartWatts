@@ -13,7 +13,7 @@ export function PowerDurationCurve({ data, height = 400, ftp }: PowerDurationCur
   return (
     <div className="card">
       <div className="card-header">
-        <h2 className="card-title">Power Duration Curve</h2>
+        <h2 className="card-title">Curva de Potencia por Duración</h2>
         {ftp && <span className="text-sm text-gray-400">FTP: {ftp}W</span>}
       </div>
 
@@ -27,7 +27,7 @@ export function PowerDurationCurve({ data, height = 400, ftp }: PowerDurationCur
           />
           <YAxis 
             stroke="#9ca3af"
-            label={{ value: 'Power (watts)', angle: -90, position: 'insideLeft' }}
+            label={{ value: 'Potencia (vatios)', angle: -90, position: 'insideLeft' }}
           />
           <Tooltip
             contentStyle={{ backgroundColor: '#1a1a1a', border: '1px solid #374151' }}
@@ -42,7 +42,7 @@ export function PowerDurationCurve({ data, height = 400, ftp }: PowerDurationCur
             strokeWidth={2}
             dot={{ fill: '#fc4c02', r: 4 }}
             activeDot={{ r: 6 }}
-            name="Peak Power"
+            name="Potencia Máxima"
           />
         </LineChart>
       </ResponsiveContainer>

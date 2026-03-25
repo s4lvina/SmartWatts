@@ -4,8 +4,8 @@ interface MetricCardProps {
   label: string;
   value: number | string;
   unit?: string;
-  trend?: 'up' | 'down' | 'neutral';
-  trendPercent?: number;
+  tendencia?: 'up' | 'down' | 'neutral';
+  porcentajeTendencia?: number;
   color?: 'default' | 'strava' | 'success' | 'warning' | 'danger';
 }
 
@@ -13,8 +13,8 @@ export function MetricCard({
   label,
   value,
   unit,
-  trend,
-  trendPercent,
+  tendencia,
+  porcentajeTendencia,
   color = 'default',
 }: MetricCardProps) {
   const colorClasses = {
@@ -38,9 +38,9 @@ export function MetricCard({
         <span className={`metric-value ${colorClasses[color]}`}>{value}</span>
         {unit && <span className="metric-unit">{unit}</span>}
       </div>
-      {trend && trendPercent !== undefined && (
-        <div className={`text-sm mt-3 ${trendClasses[trend]}`}>
-          {trend === 'up' ? '↑' : '↓'} {Math.abs(trendPercent)}%
+      {tendencia && porcentajeTendencia !== undefined && (
+        <div className={`text-sm mt-3 ${trendClasses[tendencia]}`}>
+          {tendencia === 'up' ? '↑' : '↓'} {Math.abs(porcentajeTendencia)}%
         </div>
       )}
     </div>
