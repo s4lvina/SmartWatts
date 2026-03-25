@@ -10,6 +10,7 @@ import { ZoneDistribution } from '@/components/ZoneDistribution';
 import { StravaActivities } from '@/components/StravaActivities';
 import { useStravaActivities } from '@/hooks/useStrava';
 import { createClient } from '@supabase/supabase-js';
+import { ChartsPanel } from '@/components/ChartsPanel';
 
 // Mock data for demonstration
 const mockPMCData = [
@@ -145,8 +146,8 @@ export default function Dashboard() {
         </div>
       </header>
 
-      {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      {/* Main Content - 90% Width */}
+      <div className="px-4 sm:px-6 lg:px-8 py-12" style={{ marginLeft: 'auto', marginRight: 'auto', maxWidth: '90%' }}>
         {/* Data Status Alert */}
         {activitiesLoading ? (
           <div className="mb-6 p-4 bg-blue-500/10 border border-blue-500/50 rounded text-blue-400 text-sm">
@@ -162,95 +163,56 @@ export default function Dashboard() {
           </div>
         ) : null}
 
-        {/* KPI Section */}
-        <section className="mb-12">
-          <h2 className="text-xl font-semibold text-gray-100 mb-6">Métricas Actuales</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <MetricCard
-              label="Forma Física (CTL)"
-              value={62}
-              unit="puntos"
-              tendencia="up"
-              porcentajeTendencia={5.2}
-              color="success"
-            />
-            <MetricCard
-              label="Fatiga (ATL)"
-              value={28}
-              unit="puntos"
-              tendencia="down"
-              porcentajeTendencia={8.1}
-              color="default"
-            />
-            <MetricCard
-              label="Forma (TSB)"
-              value={34}
-              unit="puntos"
-              tendencia="up"
-              porcentajeTendencia={12.5}
-              color="strava"
-            />
-            <MetricCard
-              label="FTP"
-              value={380}
-              unit="vatios"
-              tendencia="neutral"
-              color="default"
-            />
-          </div>
-        </section>
-
-        {/* Two Column Layout: 60/40 */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-12">
-          {/* Left Column - 60% (Strava Activities, Charts) */}
-          <div className="lg:col-span-2 space-y-6">
-            {/* Recent Activities from Strava */}
-            {!activitiesLoading && activities.length > 0 && (
-              <section>
-                <h2 className="text-xl font-semibold text-gray-100 mb-4">Actividades Recientes</h2>
-                <StravaActivities accessToken={user?.strava_access_token} limit={10} />
-              </section>
+        {/* Two Column Layout: Activities (60%) + Charts (40%) */}
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 mb-12">
+          {/* Left Column: Activities Table (60%) */}
+          <div className="lg:col-span-3">
+            <h2 className="text-xl font-semibold text-gray-100 mb-6">Actividades Recientes</h2>
+            {!activitiesLoading && activities.length > 0 ? (
+              <StravaActivities accessToken={user?.strava_access_token} limit={50} />
+            ) : (
+              <div className="p-6 bg-gray-800/50 rounded-lg border border-gray-700 text-center text-gray-400">
+                Cargando actividades...
+              </div>
             )}
-
-            {/* PMC Chart */}
-            <section>
-              <PMCChart data={mockPMCData} height={400} />
-            </section>
-
-            {/* Power Curve & Zones */}
-            <div className="grid grid-cols-1 gap-6">
-              <PowerDurationCurve data={mockPowerCurveData} height={350} ftp={380} />
-            </div>
           </div>
 
-          {/* Right Column - 40% (Coach Analysis, Key Info) */}
-          <div className="lg:col-span-1 space-y-6">
-            {/* Coach Section */}
-            <section className="card sticky top-24">
-              <div className="card-header">
-                <h2 className="card-title">📊 Análisis del Entrenador IA</h2>
-              </div>
-              <div className="space-y-4">
-                <div className="bg-dark border border-gray-700 rounded p-4">
-                  <p className="text-sm text-gray-300">
-                    <strong>Recomendación:</strong> Tu forma está excelente hoy (TSB +34). Este es el momento ideal para una sesión de alta intensidad. Considera una sesión como 5×8min en zona Z4-Z5.
-                  </p>
-                </div>
-                <div className="bg-dark border border-gray-700 rounded p-4">
-                  <p className="text-sm text-gray-300">
-                    <strong>Consejo de Recuperación:</strong> Basado en la carga de actividad reciente, prioriza 8+ horas de sueño esta noche. Nutrición post-entrenamiento: 60g CHO + 25g proteína dentro de 30 minutos.
-                  </p>
-                </div>
-              </div>
-            </section>
+          {/* Right Column: Charts with Tabs (40%) */}
+          <div className="lg:col-span-2">
+            <ChartsPanel
+              mockPMCData={mockPMCData}
+              mockPowerCurveData={mockPowerCurveData}
+              mockPowerZoneData={mockPowerZoneData}
+              mockHRZoneData={mockHRZoneData}
+            />
           </div>
         </div>
 
-        {/* Full Width Section - Heart Rate Zones */}
-        <section className="mb-12">
+        {/* Coach Section - Full Width */}
+        <section className="card mb-12">
+          <div className="card-header">
+            <h2 className="card-title">📊 Análisis del Entrenador IA</h2>
+          </div>
+          <div className="space-y-4">
+            <div className="bg-dark border border-gray-700 rounded p-4">
+              <p className="text-sm text-gray-300">
+                <strong>Recomendación:</strong> Tu forma está excelente hoy (TSB +34). Este es el momento ideal para una sesión de alta intensidad. Considera una sesión como 5×8min en zona Z4-Z5.
+              </p>
+            </div>
+            <div className="bg-dark border border-gray-700 rounded p-4">
+              <p className="text-sm text-gray-300">
+                <strong>Consejo de Recuperación:</strong> Basado en la carga de actividad reciente, prioriza 8+ horas de sueño esta noche. Nutrición post-entrenamiento: 60g CHO + 25g proteína dentro de 30 minutos.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* HR Zones - Full Width */}
+        <section>
+          <h2 className="text-xl font-semibold text-gray-100 mb-6">Distribución de Zonas de Frecuencia Cardíaca</h2>
           <ZoneDistribution
             data={mockHRZoneData}
-            title="Distribución de Zonas de Frecuencia Cardíaca"
+            title="Zonas de Frecuencia Cardíaca"
             height={300}
           />
         </section>
