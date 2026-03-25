@@ -1,12 +1,24 @@
 'use client';
 
-import { useSearchParams } from 'next/navigation';
-import { useState } from 'react';
+import { useSearchParams, useRouter } from 'next/navigation';
+import { useState, useEffect } from 'react';
 
 export default function LoginPage() {
   const searchParams = useSearchParams();
+  const router = useRouter();
   const error = searchParams.get('error');
   const [isLoading, setIsLoading] = useState(false);
+
+  // Check if user is already authenticated
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const userData = localStorage.getItem('smartwatts_user');
+      if (userData) {
+        // Usuario ya está autenticado, redirige al dashboard
+        router.push('/');
+      }
+    }
+  }, [router]);
 
   const handleStravaLogin = () => {
     setIsLoading(true);
@@ -45,7 +57,9 @@ export default function LoginPage() {
                 'Error al guardar datos. Por favor, intenta de nuevo'}
               {error === 'authentication_failed' &&
                 'La autenticación falló. Por favor, intenta de nuevo'}
-              {!['no_authorization_code', 'database_error', 'authentication_failed'].includes(
+              {error === 'missing_supabase_config' &&
+                'Error de configuración del servidor. Por favor, intenta más tarde'}
+              {!['no_authorization_code', 'database_error', 'authentication_failed', 'missing_supabase_config'].includes(
                 error
               ) && `Error: ${error}`}
             </div>

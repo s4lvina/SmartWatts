@@ -7,6 +7,18 @@ export default function AuthenticatedPage() {
   const router = useRouter();
 
   useEffect(() => {
+    // Read user data from cookie
+    const cookieString = document.cookie
+      .split('; ')
+      .find(row => row.startsWith('smartwatts_user='));
+    
+    if (cookieString) {
+      const userData = JSON.parse(decodeURIComponent(cookieString.substring('smartwatts_user='.length)));
+      // Store in localStorage for client-side access
+      localStorage.setItem('smartwatts_user', JSON.stringify(userData));
+      console.log('[Authenticated Page] User data saved:', userData.name);
+    }
+
     // Redirect to dashboard after short delay
     const timer = setTimeout(() => {
       router.push('/');
