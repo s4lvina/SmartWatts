@@ -1,0 +1,116 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  @apply border-gray-800;
+}
+
+html {
+  @apply scroll-smooth;
+}
+
+body {
+  @apply bg-dark text-gray-100 antialiased;
+  color-scheme: dark;
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  @apply w-2 h-2;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-dark-secondary;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-700 rounded hover:bg-gray-600;
+}
+
+/* Custom Components */
+.card {
+  @apply rounded-lg border border-gray-800 bg-dark-card p-6;
+}
+
+.card-header {
+  @apply mb-6 flex items-center justify-between;
+}
+
+.card-title {
+  @apply text-lg font-semibold text-gray-100;
+}
+
+.metric-label {
+  @apply text-sm font-medium text-gray-400;
+}
+
+.metric-value {
+  @apply text-3xl font-bold text-gray-100;
+}
+
+.metric-unit {
+  @apply text-lg text-gray-500 ml-1;
+}
+
+.badge {
+  @apply inline-flex items-center rounded-full px-3 py-1 text-sm font-medium;
+}
+
+.badge-success {
+  @apply bg-green-500/20 text-green-300;
+}
+
+.badge-warning {
+  @apply bg-yellow-500/20 text-yellow-300;
+}
+
+.badge-danger {
+  @apply bg-red-500/20 text-red-300;
+}
+
+.badge-strava {
+  @apply bg-strava/20 text-strava;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.3s ease-in-out;
+}
+
+/* Chart Theming for Recharts */
+.recharts-wrapper {
+  @apply outline-none;
+}
+
+.recharts-text {
+  @apply fill-gray-400 font-medium;
+}
+
+.recharts-dot {
+  @apply outline-none;
+}
