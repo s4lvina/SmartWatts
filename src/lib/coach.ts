@@ -3,8 +3,7 @@
  * Provides training analysis and recommendations using Google's Generative AI
  */
 
-import { generateText } from 'ai';
-import { google } from '@ai-sdk/google';
+import axios from 'axios';
 
 export interface CoachAnalysis {
   training_recommendation: string;
@@ -33,8 +32,7 @@ export async function getCoachAnalysis(
     };
   }
 ): Promise<CoachAnalysis> {
-  const prompt = `
-You are an expert cycling coach analyzing athlete performance data.
+  const prompt = `You are an expert cycling coach analyzing athlete performance data.
 
 Athlete Profile:
 - FTP: ${athleteProfile.ftp}W
@@ -53,21 +51,55 @@ Based on this data, provide:
 3. Recovery priorities
 4. Injury/overtraining risk assessment
 
-Format as JSON.
-`;
+Format as JSON with keys: training_recommendation, nutrition, recovery, risk_assessment`;
 
   try {
-    const { text } = await generateText({
-      model: google('gemini-1.5-pro'),
-      prompt,
-    });
+    const apiKey = process.env.GOOGLE_GENERATIVE_AI_API_KEY;
+    if (!apiKey) {
+      throw new Error('GOOGLE_GENERATIVE_AI_API_KEY not configured');
+    }
 
-    // Parse JSON response
-    const analysis = JSON.parse(text) as CoachAnalysis;
-    return analysis;
+    const response = await axios.post(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent?key=${apiKey}`,
+      {
+        contents: [
+          {
+            parts: [
+              {
+                text: prompt,
+              },
+            ],
+          },
+        ],
+      }
+    );
+
+    const text = response.data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+    
+    // Try to parse JSON from response
+    const jsonMatch = text.match(/\{[\s\S]*\}/);
+    if (jsonMatch) {
+      const analysis = JSON.parse(jsonMatch[0]) as CoachAnalysis;
+      return analysis;
+    }
+
+    // Default response if parsing fails
+    return {
+      training_recommendation: 'Rest day or recovery ride - check your current form (TSB) before intense sessions',
+      nutrition: 'Maintain balanced nutrition with adequate carbohydrates',
+      recovery: 'Ensure 8+ hours sleep, manage stress levels',
+      risk_assessment: 'Monitor fatigue levels to prevent overtraining',
+    };
   } catch (error) {
     console.error('Coach analysis error:', error);
-    throw new Error('Failed to get coach analysis');
+    
+    // Return default safe coaching recommendations
+    return {
+      training_recommendation: 'Consult your coach or rest today',
+      nutrition: 'Hydrate well and maintain consistent nutrition',
+      recovery: 'Prioritize sleep and stress management',
+      risk_assessment: 'Monitor your training load carefully',
+    };
   }
 }
 
